@@ -1,0 +1,49 @@
+---
+// src/pages/about.astro
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Who is [Client Name]? | Marketing Portfolio">
+  <main class="max-w-4xl mx-auto px-6 py-24">
+    <header class="mb-24">
+      <h1 class="text-6xl md:text-8xl font-black tracking-tight leading-[0.9] text-gray-900 mb-8">
+        Who is <br/> [Client Name]?
+      </h1>
+      <p class="text-2xl text-gray-600 max-w-2xl leading-relaxed">
+        A [Region]-based multimedia producer focused on creating clean, professional visuals for brands that care about how they present themselves.
+      </p>
+    </header>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-16 mb-32">
+      <div class="prose prose-xl text-gray-800">
+        <p>I believe good visual work is not about doing more. It's about doing it right. About understanding a brand and how it needs to be seen.</p>
+      </div>
+      <div class="prose prose-xl text-gray-800">
+        <p>My work is rooted in clarity, consistency, and thoughtful execution rather than chasing volume or trends.</p>
+      </div>
+    </section>
+
+    <section class="border-t border-gray-100 pt-24 mb-32">
+      <h2 class="text-3xl font-bold mb-12">Why work with me?</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
+        <div>
+          <h3 class="font-bold text-lg mb-2">A Careful Process</h3>
+          <p class="text-gray-500">I take the time to do things properly. The focus is on structure and reliable delivery, not rushing work out.</p>
+        </div>
+        <div>
+          <h3 class="font-bold text-lg mb-2">Brand-First Results</h3>
+          <p class="text-gray-500">Every project is approached individually. No templates. No generic formulas.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bg-gray-50 p-12 rounded-2xl">
+      <h2 class="text-3xl font-bold mb-8">Get in touch!</h2>
+      <div class="flex flex-wrap gap-8 text-lg font-medium">
+        <a href="mailto:hello@domain.com" class="hover:underline">Email me</a>
+        <a href="tel:+123456789" class="hover:underline">Call me</a>
+        <a href="#" class="hover:underline">Instagram</a>
+      </div>
+    </footer>
+  </main>
+</Layout>

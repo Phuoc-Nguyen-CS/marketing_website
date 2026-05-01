@@ -18,5 +18,9 @@ const sortedProjects = allProjects.sort((a, b) => a.data.order - b.data.order);
                 <ProjectCard project={project} />
             ))}
         </section>
+		<div class="mt-6 flex gap-4">
+			<a href="#work" class="bg-black text-white px-6 py-2 rounded-full font-medium">View Work</a>
+			<a href="/about" class="border border-black px-6 py-2 rounded-full font-medium">Who is?</a>
+		</div>
 	</main>
 </Layout>
