@@ -1,0 +1,23 @@
+---
+import { Image } from 'astro:assets';
+const { project } = Astro.props;
+const { title, category, thumbnail } = project.data;
+
+const assetBaseUrl = import.meta.env.PUBLIC_ASSET_URL;
+const fullThumbnailUrl = `${assetBaseUrl}/${thumbnail}`;
+---
+<a href={`/work/${project.id}`} class="group block overflow-hidden rounded-lg bg-gray-50 border border-gray-100">
+    <div class="aspect-video w-full overflow-hidden bg-gray-200">
+        <Image 
+            src={fullThumbnailUrl} 
+            alt={title}
+            width={800} 
+            height={450}
+            class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+    </div>
+    <div class="p-4">
+        <h3 class="text-lg font-bold text-gray-900 leading-tight">{title}</h3>
+        <p class="text-sm text-gray-500 uppercase tracking-wider mt-1">{category}</p>
+    </div>
+</a>

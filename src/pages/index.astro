@@ -1,17 +1,22 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
 
+const allProjects = await getCollection('projects');
+const sortedProjects = allProjects.sort((a, b) => a.data.order - b.data.order);
 ---
+<Layout title="Creative Portfolio">
+	<main class="max-w-6xl mx-auto px-6 py-12">
+        <header class="mb-16">
+            <h1 class="text-6xl font-extrabold tracking-tight">John Doe</h1>
+            <p class="mt-4 text-xl text-gray-600">Multimedia Specialist & Producer.</p>
+        </header>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {sortedProjects.map((project) => (
+                <ProjectCard project={project} />
+            ))}
+        </section>
+	</main>
+</Layout>
