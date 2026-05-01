@@ -1,9 +1,11 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  integrations: [tailwind()],
+  vite: {
+    plugins: [tailwindcss()],
+  },
   image: {
-    domains: ['pub-ef51961f3a6140109196ab2cbe140139.r2.dev'], 
+    domains: ['pub-your-id.r2.dev'], 
   },
 });
