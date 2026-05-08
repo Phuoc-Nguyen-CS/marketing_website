@@ -1,4 +1,5 @@
 ---
+// src/layouts/Layout.astro
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 ---
@@ -6,29 +7,53 @@ import { ClientRouter } from 'astro:transitions';
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" /><meta name="viewport" content="width=device-width" />
-		<title>Troy</title>
+		<title>Troy | Multimedia & Backend</title>
 		<ClientRouter />
 	</head>
 	<body class="bg-white text-black selection:bg-black selection:text-white">
-		<a href="/" class="fixed top-8 left-8 z-50 mix-blend-difference text-white font-black tracking-tighter text-2xl">
-			TROY.
-		</a>
+		
+		<nav class="fixed top-0 left-0 w-full z-50 mix-blend-difference text-white">
+			<div class="flex justify-between items-center p-6 md:p-10">
+				<a href="/" class="font-black tracking-tighter text-2xl">TROY.</a>
 
-		<button id="menu-toggle" class="fixed top-8 right-8 z-50 mix-blend-difference text-white font-mono text-sm uppercase tracking-widest">
-			[ Menu ]
-		</button>
+                <div id="nav-container" class="flex items-center gap-8 py-2">
+                    <div class="flex items-center gap-8">
+                        <div id="nav-links" class="flex gap-6 overflow-hidden max-w-0 opacity-0 transition-all duration-500 ease-in-out pointer-events-none">
+                            <a href="/work" class="text-base uppercase tracking-[0.2em] hover:opacity-60 transition-opacity">Work</a>
+                            <a href="/about" class="text-base uppercase tracking-[0.2em] hover:opacity-60 transition-opacity">About</a>
+                            <a href="/contact" class="text-base uppercase tracking-[0.2em] hover:opacity-60 transition-opacity">Contact</a>
+                        </div>
+                        
+                        <button id="menu-toggle" class="font-mono text-base uppercase tracking-[0.2em] outline-none">
+                            [ Menu ]
+                        </button>
+                    </div>
+                </div>
+			</div>
+		</nav>
 
 		<slot />
 
-    <script>
+		<script>
     document.addEventListener('astro:page-load', () => {
-        const menuToggle = document.getElementById('menu-toggle');
-        if (menuToggle) {
-        menuToggle.onclick = () => {
-            alert('Menu Overlay coming next—this is where your links will live.');
-        };
-        }
+        const container = document.getElementById('nav-container');
+        const links = document.getElementById('nav-links');
+        const toggle = document.getElementById('menu-toggle');
+        
+        // OPEN: When mouse enters the container
+        container?.addEventListener('mouseenter', () => {
+            links?.classList.remove('max-w-0', 'opacity-0', 'pointer-events-none');
+            links?.classList.add('max-w-md', 'opacity-100', 'pointer-events-auto');
+            if (toggle) toggle.innerText = '[ Close ]';
+        });
+
+        // CLOSE: When mouse leaves the container
+        container?.addEventListener('mouseleave', () => {
+            links?.classList.remove('max-w-md', 'opacity-100', 'pointer-events-auto');
+            links?.classList.add('max-w-0', 'opacity-0', 'pointer-events-none');
+            if (toggle) toggle.innerText = '[ Menu ]';
+        });
     });
-    </script>
+</script>
 	</body>
 </html>
