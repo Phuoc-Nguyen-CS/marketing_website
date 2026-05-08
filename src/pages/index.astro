@@ -1,26 +1,48 @@
 ---
+// src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
 
 const allProjects = await getCollection('projects');
-const sortedProjects = allProjects.sort((a, b) => a.data.order - b.data.order);
+const assetBaseUrl = import.meta.env.PUBLIC_ASSET_URL;
+const videoSrc = `${assetBaseUrl}/14570473_1920_1080_30fps.mp4`; 
 ---
-<Layout title="Creative Portfolio">
-	<main class="max-w-6xl mx-auto px-6 py-12">
-        <header class="mb-16">
-            <h1 class="text-6xl font-extrabold tracking-tight">Troy</h1>
-            <p class="mt-4 text-xl text-gray-600">Multimedia Specialist & Producer.</p>
-        </header>
 
-        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {sortedProjects.map((project) => (
-                <ProjectCard project={project} />
-            ))}
-        </section>
-		<div class="mt-6 flex gap-4">
-			<a href="#work" class="bg-black text-white px-6 py-2 rounded-full font-medium">View Work</a>
-			<a href="/about" class="border border-black px-6 py-2 rounded-full font-medium">Who is?</a>
-		</div>
-	</main>
+<Layout title="PKDN. | Multimedia & Backend">
+  <section class="relative h-screen w-full overflow-hidden bg-black">
+    <video 
+      autoplay 
+      muted 
+      loop 
+      playsinline 
+      class="absolute inset-0 h-full w-full object-cover opacity-60"
+    >
+      <source src={videoSrc} type="video/mp4" />
+    </video>
+
+    <div class="relative z-10 flex h-full flex-col justify-center px-6 md:px-12">
+      <h1 class="text-7xl md:text-[12rem] font-black tracking-tighter leading-[0.8] text-white">
+        SOME STATEMENT <br/> TEXT HERE.
+      </h1>
+      <div class="mt-12 max-w-xl">
+        <p class="text-xl md:text-2xl text-gray-300 font-medium leading-relaxed">
+          Troy — Some Text here
+        </p>
+        <a href="#work" class="mt-8 inline-block border-b-2 border-white pb-1 text-lg font-bold text-white hover:text-gray-300 hover:border-gray-300 transition-all">
+          Explore Work ↓
+        </a>
+      </div>
+    </div>
+    
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 pointer-events-none"></div>
+  </section>
+
+  <main class="max-w-6xl mx-auto px-6 py-24">
+    <section id="work" class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24">
+      {allProjects.map((project) => (
+        <ProjectCard project={project} />
+      ))}
+    </section>
+  </main>
 </Layout>
