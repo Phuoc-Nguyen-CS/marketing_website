@@ -1,0 +1,36 @@
+---
+// src/components/Marquee.astro
+interface Props {
+  images: string[]; 
+  speed?: string;
+  reverse?: boolean;
+}
+
+const { images, speed = "60s", reverse = false } = Astro.props;
+const assetBaseUrl = import.meta.env.PUBLIC_ASSET_URL || '';
+
+// Duplicate the array for a seamless loop
+const duplicatedImages = [...images, ...images];
+---
+
+<div class="marquee-wrapper relative w-full overflow-hidden bg-white py-4">
+  <div 
+    class:list={[
+      "flex w-max will-change-transform",
+      reverse ? "animate-marquee-reverse" : "animate-marquee"
+    ]}
+    style={{ "--speed": speed }}
+  >
+    {duplicatedImages.map((img) => (
+      <div class="h-[25vh] md:h-[35vh] w-[250px] md:w-[450px] flex-shrink-0 border-r border-white/10">
+        <img 
+          src={`${assetBaseUrl}/${img}`} 
+          alt="Gallery entry"
+          class="h-full w-full object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    ))}
+  </div>
+</div>

@@ -1,48 +1,144 @@
 ---
-// src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
+import Marquee from '../components/Marquee.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
 
+// Fetch and sort projects by the 'order' field defined in your config
 const allProjects = await getCollection('projects');
-const assetBaseUrl = import.meta.env.PUBLIC_ASSET_URL;
-const videoSrc = `${assetBaseUrl}/14570473_1920_1080_30fps.mp4`; 
+const sortedProjects = allProjects.sort((a, b) => a.data.order - b.data.order);
+
+const assetBaseUrl = import.meta.env.PUBLIC_ASSET_URL || '';
+const videoSrc = `${assetBaseUrl}/14570473_1920_1080_30fps.mp4`;
+
+// Chunking logic for the editorial layout (Groups of 5)
+const chunkedProjects = [];
+for (let i = 0; i < sortedProjects.length; i += 5) {
+    chunkedProjects.push(sortedProjects.slice(i, i + 5));
+}
+
+// Map gallery images to full R2 URLs before passing to the Marquee
+const galleryImages = [
+    "photography/1.jpg",
+    "photography/2.jpg",
+    "photography/3.jpg",
+    "photography/4.jpg",
+];
+
 ---
 
-<Layout title="PKDN. | Multimedia & Backend">
+<Layout title="Troy | Multimedia Producer & Backend Engineer">
+  <!-- Hero Section w/Video -->
   <section class="relative h-screen w-full overflow-hidden bg-black">
     <video 
       autoplay 
       muted 
       loop 
       playsinline 
-      class="absolute inset-0 h-full w-full object-cover opacity-60"
+	  preload="auto"
+	  poster={`${videoSrc}`}
+      class="absolute inset-0 h-full w-full object-cover opacity-50"
     >
       <source src={videoSrc} type="video/mp4" />
     </video>
 
-    <div class="relative z-10 flex h-full flex-col justify-center px-6 md:px-12">
-      <h1 class="text-7xl md:text-[12rem] font-black tracking-tighter leading-[0.8] text-white">
-        SOME STATEMENT <br/> TEXT HERE.
+	<!-- Text within the Video Section -->
+    <div class="relative z-10 flex h-full flex-col justify-center px-6 md:px-16">
+      <h1 class="text-6xl md:text-[10rem] font-black tracking-tighter leading-[0.85] text-white uppercase">
+        SOME TEXT <br/> HERE.
       </h1>
-      <div class="mt-12 max-w-xl">
-        <p class="text-xl md:text-2xl text-gray-300 font-medium leading-relaxed">
-          Troy — Some Text here
+      <div class="mt-10 max-w-2xl">
+        <p class="text-lg md:text-xl text-gray-300 font-medium leading-relaxed">
+          Troy (some more text here).
         </p>
-        <a href="#work" class="mt-8 inline-block border-b-2 border-white pb-1 text-lg font-bold text-white hover:text-gray-300 hover:border-gray-300 transition-all">
-          Explore Work ↓
+        <a href="#work" class="mt-8 inline-flex items-center gap-2 border-b border-white pb-1 text-sm font-bold uppercase tracking-widest text-white hover:text-gray-400 hover:border-gray-400 transition-all">
+          Explore Work 
+          <span class="text-xs">↓</span>
         </a>
       </div>
     </div>
     
-    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 pointer-events-none"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none"></div>
   </section>
 
-  <main class="max-w-6xl mx-auto px-6 py-24">
-    <section id="work" class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24">
-      {allProjects.map((project) => (
-        <ProjectCard project={project} />
+  <!-- Statement about the work -->
+  <main id="work">
+    <section class="py-32 px-6 md:px-16 bg-white">
+      <div class="max-w-5xl">
+        <p class="text-4xl md:text-6xl font-medium tracking-tight leading-[1.1] text-black">
+          Clean, professional visuals for brands and companies that care about how they present themselves.
+        </p>
+        
+        <div class="mt-16 flex flex-wrap gap-16">
+          <div>
+            <span class="block text-[10px] uppercase tracking-widest text-gray-400 mb-3">Location</span>
+            <p class="text-sm font-semibold uppercase">Southern California</p>
+          </div>
+          <div>
+            <span class="block text-[10px] uppercase tracking-widest text-gray-400 mb-3">Expertise</span>
+            <p class="text-sm font-semibold uppercase">Videography / Photography / Thumbnails</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+	<!-- Gallery Section -->
+    <section class="py-12 bg-white border-t border-gray-100">
+      <div class="px-6 md:px-16 mb-10 flex justify-between items-end">
+        <span class="text-[10px] font-mono uppercase tracking-[0.3em] text-gray-400">
+          Photography
+        </span>
+      </div>
+      <Marquee images={galleryImages} speed="80s" />
+    </section>
+
+	<!-- Work Section Unsure if we should keep for now -->
+<!-- 
+    <section class="p-6 md:p-16 bg-white">
+      {chunkedProjects.map((group, gIdx) => (
+        <div class="mb-40 last:mb-0">
+          <div class="flex justify-between items-baseline mb-16 border-b border-gray-100 pb-6">
+            <h3 class="text-xs font-mono uppercase tracking-widest text-gray-500">Series — 0{gIdx + 1}</h3>
+            <span class="text-[10px] font-mono text-gray-400 uppercase">Collection {group.length}</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24">
+            {group.map((project, pIdx) => (
+              <div class={pIdx === 0 ? "md:col-span-2" : "md:col-span-1"}>
+                <ProjectCard project={project} featured={pIdx === 0} />
+              </div>
+            ))}
+          </div>
+        </div>
       ))}
     </section>
-  </main>
+  </main> -->
+
+  <footer class="bg-black text-white px-6 py-24 md:px-16">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-16 md:gap-8">
+      <div class="col-span-1 md:col-span-2">
+         <a href="/" class="text-3xl font-black tracking-tighter">Troy.</a>
+         <p class="mt-6 text-gray-500 max-w-xs text-sm leading-relaxed">
+            Some long text here about what you want to say about your brand
+         </p>
+      </div>
+
+      <div>
+        <h4 class="text-gray-600 text-[10px] uppercase tracking-[0.2em] mb-8 font-bold">Quick Links</h4>
+        <ul class="space-y-4 text-sm font-medium">
+          <li><a href="/" class="hover:text-gray-400 transition-colors">Selected Work</a></li>
+          <li><a href="/about" class="hover:text-gray-400 transition-colors">Who is?</a></li>
+          <li><a href="mailto:hello@domain.com" class="hover:text-gray-400 transition-colors">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-gray-600 text-[10px] uppercase tracking-[0.2em] mb-8 font-bold">Legal</h4>
+        <p class="text-[10px] text-gray-500 leading-relaxed uppercase tracking-wider">
+          © {new Date().getFullYear()} Troy. <br/>
+          All Rights Reserved.
+        </p>
+      </div>
+    </div>
+  </footer>
 </Layout>

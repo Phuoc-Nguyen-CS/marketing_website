@@ -1,1 +1,28 @@
 @import "tailwindcss";
+
+@theme {
+  /* Define the keyframes once */
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes marquee-reverse {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+  }
+}
+
+/* Create the utility classes */
+.animate-marquee {
+  animation: marquee var(--speed, 60s) linear infinite;
+}
+
+.animate-marquee-reverse {
+  animation: marquee-reverse var(--speed, 60s) linear infinite;
+}
+
+/* Pause physics on hover globally for any marquee */
+.animate-marquee:hover,
+.animate-marquee-reverse:hover {
+  animation-play-state: paused;
+}
