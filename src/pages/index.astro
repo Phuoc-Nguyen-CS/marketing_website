@@ -9,7 +9,8 @@ const allProjects = await getCollection('projects');
 const sortedProjects = allProjects.sort((a, b) => a.data.order - b.data.order);
 
 const assetBaseUrl = import.meta.env.PUBLIC_ASSET_URL || '';
-const videoSrc = `${assetBaseUrl}/14570473_1920_1080_30fps.mp4`;
+// const videoSrc = `${assetBaseUrl}/14570473_1920_1080_30fps.mp4`;
+const videoSrc = `${assetBaseUrl}/intro_vid.mp4`;
 
 // Chunking logic for the editorial layout (Groups of 5)
 const chunkedProjects = [];
