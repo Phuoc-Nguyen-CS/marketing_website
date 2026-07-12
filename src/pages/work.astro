@@ -1,0 +1,271 @@
+---
+// src/pages/work.astro
+import Layout from '../layouts/Layout.astro';
+
+// Pull the base URL from the environment config (Cloudflare R2 Bucket)
+const assetBaseUrl = import.meta.env.PUBLIC_ASSET_URL || '';
+
+// photography images list
+const photographyImages = [
+  { id: '1', src: 'photography/1.jpg', category: 'Landscape', title: 'Mountain Silence', desc: 'Captured in the early morning fog of the Pacific Northwest.' },
+  { id: '2', src: 'photography/2.jpg', category: 'Portrait', title: 'Expressions of Youth', desc: 'A candid character study shot under natural golden light.' },
+  { id: '3', src: 'photography/3.jpg', category: 'Street', title: 'Urban Reflection', desc: 'Rainy afternoon reflections on a bustling metropolitan street.' },
+  { id: '4', src: 'photography/4.jpg', category: 'Editorial', title: 'Structured Shadows', desc: 'Architectural geometry interacting with harsh midday shadows.' },
+  { id: '5', src: 'photography/5.jpg', category: 'Landscape', title: 'Oceanic Drift', desc: 'Long exposure capture of tidal flows along the rugged coastline.' },
+  { id: '6', src: 'photography/6.jpg', category: 'Portrait', title: 'In-Between Moments', desc: 'Backstage documentary portrait of a local musician.' },
+  { id: '7', src: 'photography/7.jpg', category: 'Street', title: 'Neon Nightfall', desc: 'Chiaroscuro shadows and glowing signage in downtown alleys.' },
+  { id: '8', src: 'photography/8.jpg', category: 'Editorial', title: 'Woven Textures', desc: 'A minimalist exploration of fashion and fabric contrast.' },
+];
+
+const categories = ['All', ...new Set(photographyImages.map(img => img.category))];
+---
+
+<Layout title="Work | Photography Portfolio">
+  <main class="min-h-screen bg-neutral-950 text-neutral-100 pt-40 md:pt-48 pb-24 px-6 md:px-16 selection:bg-white selection:text-black">
+    <!-- Header Section -->
+    <header class="max-w-5xl mb-16 md:mb-24">
+      <span class="text-xs font-mono uppercase tracking-[0.3em] text-neutral-500 mb-4 block">Selected Works</span>
+      <h1 class="text-5xl md:text-8xl font-black tracking-tighter leading-none uppercase text-white mb-6">
+        Capturing <br/>the unseen.
+      </h1>
+      <p class="text-lg md:text-xl text-neutral-400 max-w-2xl font-light leading-relaxed">
+        A curated selection of visual stories, raw moments, and architectural studies. Hover and click on any frame to see details.
+      </p>
+    </header>
+
+    <!-- Filter Buttons & Controls -->
+    <div class="flex flex-wrap gap-3 mb-12 border-b border-neutral-800 pb-8">
+      {categories.map((cat) => (
+        <button
+          class="filter-btn px-5 py-2 text-xs uppercase tracking-widest font-semibold border rounded-full transition-all duration-300 cursor-pointer"
+          data-category={cat}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
+
+    <!-- Gallery Grid (Masonry-like layout using varying span classes) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="gallery-grid">
+      {photographyImages.map((image, index) => {
+        // Create an alternating visual rhythm with different grid styles
+        const isWide = index % 5 === 0;
+        const isTall = index % 3 === 1;
+        
+        return (
+          <div 
+            class={`gallery-item group relative overflow-hidden bg-neutral-900 border border-neutral-800/40 rounded-lg cursor-pointer transition-all duration-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.05)] ${isWide ? 'md:col-span-2' : ''} ${isTall ? 'md:row-span-2 aspect-[3/4]' : 'aspect-video'}`}
+            data-category={image.category}
+            data-title={image.title}
+            data-desc={image.desc}
+            data-src={`${assetBaseUrl}/${image.src}`}
+            data-index={index}
+          >
+            <!-- Background Image -->
+            <img 
+              src={`${assetBaseUrl}/${image.src}`} 
+              alt={image.title}
+              class="h-full w-full object-cover transform scale-100 transition-transform duration-700 ease-out group-hover:scale-105"
+              loading="lazy"
+              decoding="async"
+            />
+            
+            <!-- Hover Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 md:p-8">
+              <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 mb-2">{image.category}</span>
+              <h3 class="text-2xl font-bold tracking-tight text-white mb-2">{image.title}</h3>
+              <p class="text-xs text-neutral-300 font-light line-clamp-2 max-w-sm">{image.desc}</p>
+              <div class="mt-4 flex items-center gap-2 text-[10px] font-mono uppercase tracking-wider text-white border-t border-white/10 pt-4">
+                View Frame <span class="text-xs">→</span>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300 flex flex-col justify-between p-6">
+      <!-- Top bar -->
+      <div class="flex justify-between items-center w-full">
+        <span id="lightbox-counter" class="text-xs font-mono text-neutral-500 uppercase tracking-widest">01 / 08</span>
+        <button id="lightbox-close" class="text-white hover:text-neutral-400 font-mono text-xs uppercase tracking-widest cursor-pointer px-4 py-2 border border-white/10 rounded-full bg-white/5 hover:bg-white/10 transition-all">
+          [ Close ]
+        </button>
+      </div>
+
+      <!-- Main Image Container -->
+      <div class="relative flex-1 flex items-center justify-center max-h-[70vh] my-4">
+        <button id="lightbox-prev" class="absolute left-0 md:left-4 z-10 text-white/50 hover:text-white p-4 cursor-pointer transition-colors text-3xl font-light select-none">
+          ‹
+        </button>
+        
+        <img id="lightbox-img" src="" alt="" class="max-h-full max-w-full object-contain rounded select-none opacity-0 transition-opacity duration-300" />
+        
+        <button id="lightbox-next" class="absolute right-0 md:right-4 z-10 text-white/50 hover:text-white p-4 cursor-pointer transition-colors text-3xl font-light select-none">
+          ›
+        </button>
+      </div>
+
+      <!-- Details Bar -->
+      <div class="max-w-4xl mx-auto w-full border-t border-neutral-800 pt-6 pb-4 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        <div>
+          <span id="lightbox-category" class="text-[10px] font-mono uppercase tracking-widest text-neutral-500 mb-2 block">Category</span>
+          <h2 id="lightbox-title" class="text-2xl md:text-3xl font-bold tracking-tight text-white mb-2">Title of the image</h2>
+          <p id="lightbox-desc" class="text-sm text-neutral-400 font-light max-w-2xl">Description of the image goes here.</p>
+        </div>
+        <div class="flex gap-3">
+          <span class="text-[9px] font-mono px-3 py-1 border border-neutral-800 rounded text-neutral-400 bg-neutral-900/50">Cloudflare R2 Hosted</span>
+          <span class="text-[9px] font-mono px-3 py-1 border border-neutral-800 rounded text-neutral-400 bg-neutral-900/50">1/125s f/2.8 ISO 400</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('astro:page-load', () => {
+      // Elements
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const galleryItems = document.querySelectorAll('.gallery-item');
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+      const lightboxTitle = document.getElementById('lightbox-title');
+      const lightboxDesc = document.getElementById('lightbox-desc');
+      const lightboxCategory = document.getElementById('lightbox-category');
+      const lightboxCounter = document.getElementById('lightbox-counter');
+      const lightboxClose = document.getElementById('lightbox-close');
+      const lightboxPrev = document.getElementById('lightbox-prev');
+      const lightboxNext = document.getElementById('lightbox-next');
+
+      let currentImages: HTMLElement[] = Array.from(galleryItems) as HTMLElement[];
+      let currentIndex = 0;
+
+      // Set active category style initially
+      filterButtons.forEach(btn => {
+        if (btn.getAttribute('data-category') === 'All') {
+          btn.classList.add('bg-white', 'text-black', 'border-white');
+        } else {
+          btn.classList.add('text-neutral-400', 'border-neutral-800', 'hover:text-white', 'hover:border-neutral-500');
+        }
+      });
+
+      // Filter Logic
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const selectedCategory = button.getAttribute('data-category');
+
+          // Style active button
+          filterButtons.forEach(btn => {
+            btn.classList.remove('bg-white', 'text-black', 'border-white');
+            btn.classList.add('text-neutral-400', 'border-neutral-800');
+          });
+          button.classList.remove('text-neutral-400', 'border-neutral-800');
+          button.classList.add('bg-white', 'text-black', 'border-white');
+
+          // Filter items
+          const items = Array.from(galleryItems) as HTMLElement[];
+          currentImages = [];
+          
+          items.forEach(item => {
+            const category = item.getAttribute('data-category');
+            if (selectedCategory === 'All' || category === selectedCategory) {
+              item.style.display = 'block';
+              item.style.opacity = '0';
+              setTimeout(() => {
+                item.style.opacity = '1';
+                item.style.transform = 'scale(1)';
+              }, 50);
+              currentImages.push(item);
+            } else {
+              item.style.opacity = '0';
+              item.style.transform = 'scale(0.95)';
+              setTimeout(() => {
+                item.style.display = 'none';
+              }, 300);
+            }
+          });
+        });
+      });
+
+      // Open Lightbox
+      galleryItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const element = item as HTMLElement;
+          currentIndex = currentImages.indexOf(element);
+          if (currentIndex === -1) currentIndex = 0;
+          updateLightbox();
+          
+          lightbox?.classList.remove('pointer-events-none', 'opacity-0');
+          lightbox?.classList.add('opacity-100');
+          document.body.style.overflow = 'hidden';
+        });
+      });
+
+      // Update Lightbox Content
+      function updateLightbox() {
+        if (currentImages.length === 0 || !lightboxImg) return;
+        const currentItem = currentImages[currentIndex];
+        const src = currentItem.getAttribute('data-src') || '';
+        const title = currentItem.getAttribute('data-title') || '';
+        const desc = currentItem.getAttribute('data-desc') || '';
+        const category = currentItem.getAttribute('data-category') || '';
+
+        // Transition fade effect
+        lightboxImg.style.opacity = '0';
+        setTimeout(() => {
+          lightboxImg.src = src;
+          lightboxImg.alt = title;
+          lightboxImg.style.opacity = '1';
+        }, 150);
+
+        if (lightboxTitle) lightboxTitle.textContent = title;
+        if (lightboxDesc) lightboxDesc.textContent = desc;
+        if (lightboxCategory) lightboxCategory.textContent = category;
+        if (lightboxCounter) {
+          lightboxCounter.textContent = `${(currentIndex + 1).toString().padStart(2, '0')} / ${currentImages.length.toString().padStart(2, '0')}`;
+        }
+      }
+
+      // Close Lightbox
+      function closeLightbox() {
+        lightbox?.classList.add('pointer-events-none', 'opacity-0');
+        lightbox?.classList.remove('opacity-100');
+        document.body.style.overflow = '';
+      }
+
+      lightboxClose?.addEventListener('click', closeLightbox);
+      lightbox?.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+          closeLightbox();
+        }
+      });
+
+      // Navigation
+      lightboxPrev?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+        updateLightbox();
+      });
+
+      lightboxNext?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentIndex = (currentIndex + 1) % currentImages.length;
+        updateLightbox();
+      });
+
+      // Keyboard Controls
+      document.addEventListener('keydown', (e) => {
+        if (!lightbox || lightbox.classList.contains('opacity-0')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') {
+          currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+          updateLightbox();
+        }
+        if (e.key === 'ArrowRight') {
+          currentIndex = (currentIndex + 1) % currentImages.length;
+          updateLightbox();
+        }
+      });
+    });
+  </script>
+</Layout>

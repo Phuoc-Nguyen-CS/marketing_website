@@ -12,25 +12,28 @@ import { ClientRouter } from 'astro:transitions';
 	</head>
 	<body class="bg-white text-black selection:bg-black selection:text-white">
 		
-		<nav class="fixed top-0 left-0 w-full z-50 mix-blend-difference text-white">
-			<div class="flex justify-between items-center p-6 md:p-10">
-				<a href="/" class="font-black tracking-tighter text-2xl">TROY.</a>
+		<nav class="fixed top-0 left-0 w-full z-50 text-white">
+		<!-- </nav> -->
 
-                <div id="nav-container" class="flex items-center gap-8 py-2">
-                    <div class="flex items-center gap-8">
-                        <div id="nav-links" class="flex gap-6 overflow-hidden max-w-0 opacity-0 transition-all duration-500 ease-in-out pointer-events-none">
-                            <a href="/work" class="text-base uppercase tracking-[0.2em] hover:opacity-60 transition-opacity">Work</a>
-                            <a href="/about" class="text-base uppercase tracking-[0.2em] hover:opacity-60 transition-opacity">About</a>
-                            <a href="/contact" class="text-base uppercase tracking-[0.2em] hover:opacity-60 transition-opacity">Contact</a>
-                        </div>
-                        
-                        <button id="menu-toggle" class="font-mono text-base uppercase tracking-[0.2em] outline-none">
-                            [ Menu ]
-                        </button>
-                    </div>
-                </div>
+		<!-- <div class="relative bg-white text-black z-40 flex justify-between items-center p-6 md:p-10"> -->
+    <div class="flex justify-between items-center p-6 md:p-10">
+      <a href="/" class="font-black tracking-tighter text-2xl">TROY.</a>
+
+			<div id="nav-container" class="flex items-center gap-8 py-2">
+				<div class="flex items-center gap-8">
+					<div id="nav-links" class="flex gap-6 overflow-hidden max-w-0 opacity-0 transition-all duration-500 ease-in-out pointer-events-none">
+						<a href="/work" class="text-base uppercase tracking-[0.2em] hover:opacity-60 transition-opacity">Work</a>
+						<a href="/about" class="text-base uppercase tracking-[0.2em] hover:opacity-60 transition-opacity">About</a>
+						<a href="/contact" class="text-base uppercase tracking-[0.2em] hover:opacity-60 transition-opacity">Contact</a>
+					</div>
+					
+					<button id="menu-toggle" class="font-mono text-base uppercase tracking-[0.2em] outline-none">
+						[ Menu ]
+					</button>
+				</div>
 			</div>
-		</nav>
+		</div>
+    </nav>
 
 		<slot />
 
